@@ -1,0 +1,75 @@
+<?php 
+
+require_once('function/dbCon.php');
+if(isset($_POST['btnLogin'])){
+	$user_name = $_POST['user_name'];
+	$password  = $_POST['password'];
+	 if(empty($user_name)){
+		$msg = "Please enter User Name";
+	}else if(empty($password)){
+		$msg = "Please enter password";
+	}else{
+		$sql = "select * from tb_user where user_name = '$user_name' and password = '$password'";
+		$query = mysqli_query($conn,$sql);
+		$count = mysqli_num_rows($query);
+		if($count > 0 ){
+			
+			session_start();
+			$_SESSION['user'] = $user_name;
+			header('location:productlist.php');
+		}else{
+			$msg = "Your User Name or Password is invalid";
+		}
+	}
+}
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Login </title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<style type="text/css">
+		body{
+			background-color: #008000;
+		}
+		h3{
+			margin:0 38%;
+		}
+		a,a:hover{
+			display: block;
+			text-decoration: none;
+			color:#000;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div class="container-fluid h-100 mt-5">
+		<h3> Login </h3>
+
+	<img src="images/logo.png" width = "150px" class = "rounded mx-auto d-block">
+    <div class="row justify-content-center align-items-center h-100">
+
+        <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+        	<?php require_once('error.php') ?>
+            <form action="" method = "POST">
+                <div class="form-group">
+                    <input class="form-control form-control-lg" name = "user_name" placeholder="User Name" type="text">
+                </div>
+                <div class="form-group">
+                    <input class="form-control form-control-lg" name = "password" placeholder="Password" type="password">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-w btn-lg col-md-4 offset-md-4" name = "btnLogin">Log In</button>
+                </div>
+            </form>
+            <p><a href = "#"> Forget Password </a></p>
+            <p><a href = "register.php" class = "mt-5"> Register Now </a></p>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
